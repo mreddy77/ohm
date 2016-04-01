@@ -1,0 +1,219 @@
+// Apply the java plugin to add support for Java
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'eclipse'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.bmuschko:gradle-cargo-plugin:2.2.1'
+    }
+}
+
+apply plugin: 'com.bmuschko.cargo'
+
+
+eclipse {
+    classpath {
+       downloadSources=true
+    }
+}
+
+
+// Build Configuration
+configurations.all {
+	//exclude group: "commons-logging"
+	//exclude module: "slf4j-log4j12"
+}
+configurations {
+  compile.extendsFrom providedCompile
+}
+[compileJava, compileTestJava]*.options*.compilerArgs = ["-Xlint:none"]
+project.sourceCompatibility = 1.7
+project.targetCompatibility = 1.7
+
+
+// Library versions
+ext {
+	slf4jVersion = "1.7.12"
+	logbackVersion = "1.0.9"
+
+	springVersion = "4.1.6.RELEASE"
+	springShellVersion = "1.1.0.RELEASE"
+	springsecurityVersion  ="4.0.0.RELEASE"
+	hateoasVersion = "0.4.0.RELEASE"
+	jacksonVersion = "2.5.1"
+
+	junitVersion = "4.12"
+	hamcrestVersion = "1.3"
+	cargoVersion = "2.2.1"
+	codecVersion = "1.7"
+	
+	servletVersion = "3.1.0"
+	jtaVersion = "1.2"
+	jacksonVersion = "2.6.2"
+	springfoxVersion = "2.2.2"
+	modelmapperVersion = "0.7.5"
+	aspectJVersion = "1.8.4"
+	
+	gsonVersion = "2.3"
+	
+    // tomcat container version
+    tomcat8HandleId = 'tomcat8'
+}
+
+// In this section you declare where to find the dependencies of your project
+repositories {
+	// Use 'jcenter' for resolving your dependencies.
+	// You can declare any Maven/Ivy/file repository here.
+	jcenter()	
+}
+
+
+
+// In this section you declare the dependencies for your production and test code
+dependencies {
+   
+    // h2 database
+    compile "com.h2database:h2:1.4.189"
+    
+	// Logging
+	compile "org.slf4j:slf4j-api:$slf4jVersion"
+	runtime "org.slf4j:jcl-over-slf4j:$slf4jVersion"
+	runtime "org.slf4j:slf4j-log4j12:$slf4jVersion"
+	runtime "log4j:log4j:1.2.17"
+	
+	// gson
+	compile("com.google.code.gson:gson:$gsonVersion") { force = true }
+	
+	// apache commons
+	compile("org.apache.commons:commons-lang3:3.3.2") { force = true }
+	  
+	// AspectJ
+    compile("org.aspectj:aspectjrt:$aspectJVersion") { force = true }
+    compile("org.aspectj:aspectjweaver:$aspectJVersion") { force = true }
+     
+	// Spring
+	compile("org.springframework:spring-aop:$springVersion") { force = true }
+	compile("org.springframework:spring-aspects:$springVersion") { force = true }
+	compile("org.springframework:spring-beans:$springVersion") { force = true }
+	compile("org.springframework:spring-context:$springVersion") { force = true }
+	compile("org.springframework:spring-context-support:$springVersion") { force = true }
+	compile("org.springframework:spring-core:$springVersion") { force = true }
+	compile("org.springframework:spring-messaging:$springVersion") { force = true }
+	compile("org.springframework:spring-orm:$springVersion") { force = true }
+	compile("org.springframework:spring-tx:$springVersion") { force = true }
+	compile("org.springframework:spring-web:$springVersion") { force = true }
+	compile("org.springframework:spring-webmvc:$springVersion") { force = true }
+	
+	// Spring security
+	compile("org.springframework.security:spring-security-core:$springsecurityVersion") { force = true }
+	compile("org.springframework.security:spring-security-config:$springsecurityVersion") { force = true }
+	compile("org.springframework.security:spring-security-web:$springsecurityVersion") { force = true }
+	
+	// servlet spec
+	compile("javax.servlet:javax.servlet-api:$servletVersion") { force = true }
+	
+	// java transaction
+	compile("javax.transaction:javax.transaction-api:$jtaVersion") { force = true }
+	
+	// spring data
+	compile("org.springframework.data:spring-data-commons:1.11.0.RELEASE") { force = true }
+	compile("org.springframework.data:spring-data-jpa:1.9.0.RELEASE") { force = true }
+	
+	// bean validation
+	compile("javax.validation:validation-api:1.1.0.Final") { force = true }
+	
+	// dependency injection jsr 330
+	compile("javax.inject:javax.inject:1") { force = true }
+	compile("javax.annotation:jsr250-api:1.0") { force = true }
+	
+	// jackson
+	compile("com.fasterxml.jackson.core:jackson-core:${jacksonVersion}") { force = true }
+	compile("com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}") { force = true }
+	compile("com.fasterxml.jackson.datatype:jackson-datatype-joda:${jacksonVersion}") { force = true }
+	compile("com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}") { force = true }
+	
+	// joda time
+	compile("joda-time:joda-time:2.5") { force = true }
+	
+	// spring fox
+	compile("io.springfox:springfox-swagger2:${springfoxVersion}") { force = true }
+	compile("io.springfox:springfox-swagger-ui:${springfoxVersion}") { force = true }
+	compile("io.springfox:springfox-staticdocs:${springfoxVersion}") { force = true }
+	
+	// model mapper
+	compile("org.modelmapper:modelmapper:${modelmapperVersion}") { force = true }
+	
+   
+	// Commons
+	compile "commons-codec:commons-codec:${codecVersion}"
+	compile "commons-io:commons-io:2.4"
+	
+	// mail
+	compile "javax.mail:mail:1.4.1"
+	compile "javax.activation:activation:1.1.1"
+	
+	// bouncy castle
+	compile "org.bouncycastle:bcprov-jdk15+:1.46"
+	compile "org.apache.httpcomponents:httpclient:4.5"
+	compile "org.apache.httpcomponents:httpcore:4.4.1"
+	compile "org.apache.httpcomponents:httpmime:4.5"
+	
+	
+	// web jars
+	compile "org.webjars:angularjs:1.4.7"
+	compile "org.webjars:angular-ui-bootstrap:0.14.0"
+	compile "org.webjars:bootstrap:3.3.5"
+	compile "org.webjars:jquery:2.1.3"
+	compile "org.webjars:font-awesome:4.4.0"
+	compile 'org.webjars:ngProgress:1.0.6'
+	
+	testCompile "org.hamcrest:hamcrest-library:${hamcrestVersion}"
+	// Declare the dependency for your favourite test framework you want to use in your tests.
+	// TestNG is also supported by the Gradle Test task. Just change the
+	// testCompile dependency to testCompile 'org.testng:testng:6.8.1' and add
+	// 'test.useTestNG()' to your build script.
+	testCompile "junit:junit:${junitVersion}"
+	testCompile 'org.mockito:mockito-all:1.8.4'
+
+	// cargo plugin to deploy to a container (like tomcat)
+	//classpath "com.bmuschko:gradle-cargo-plugin:${cargoVersion}"
+}
+
+
+cargo {
+     	containerId = 'tomcat8x'
+		port = 8082
+	
+	deployable {		
+		file = file('/home/mreddy/workspace/testIOhm/build/libs/testIOhm.war')
+		context = 'testIOhm'
+	}
+
+	local {
+	  	homeDir = file('/home/mreddy/work/installed/apache-tomcat-8.0.26')
+		outputFile = file('/home/mreddy/workspace/testIOhm/build/output.log')
+		timeout = 300000
+
+		containerProperties {
+			property 'cargo.tomcat.ajp.port', 9099		    
+		    
+		}
+		systemProperties {
+		    property 'spring.profiles.active', 'staging'	
+		    property 'log4j.level', 'DEBUG'	
+		    property 'app.config.dir', '/home/mreddy/workspace/testIOhm/src/main/resources'   
+	     
+		}
+	}
+}
+
+build.mustRunAfter cargoStopLocal
+cargoStartLocal.mustRunAfter build
+
+cargoRedeployLocal.dependsOn  cargoStopLocal, build, cargoStartLocal
+
